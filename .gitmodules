@@ -1,3 +1,6 @@
 [submodule "concierge"]
 	path = concierge
 	url = git@github.com:uwine-fr/concierge.git
+[submodule "uwstyle"]
+	path = uwstyle
+	url = git@github.com:uwine-fr/uwstyle.git
