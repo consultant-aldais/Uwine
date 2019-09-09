@@ -4,3 +4,6 @@
 [submodule "uwstyle"]
 	path = uwstyle
 	url = git@github.com:uwine-fr/uwstyle.git
+[submodule "videos"]
+	path = videos
+	url = git@github.com:uwine-fr/videos.git
