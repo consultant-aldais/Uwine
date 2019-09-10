@@ -1,1 +1,3 @@
-pushjack==1.5.0
+apns2==0.6.0
+pyfcm==1.4.7
+
