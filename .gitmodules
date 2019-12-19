@@ -7,3 +7,9 @@
 [submodule "videos"]
 	path = videos
 	url = git@github.com:uwine-fr/videos.git
+[submodule "web_treeview_clickable"]
+	path = web_treeview_clickable
+	url = git@github.com:uwine-fr/web_treeview_clickable.git
+[submodule "events"]
+	path = events
+	url = git@github.com:uwine-fr/events.git
