@@ -16,3 +16,6 @@
 [submodule "uwine-events"]
 	path = uwine-events
 	url = git@github.com:uwine-fr/uwine-events.git
+[submodule "shop-manager"]
+	path = shop-manager
+	url = git@github.com:uwine-fr/shop-manager.git
