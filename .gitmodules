@@ -13,3 +13,6 @@
 [submodule "events"]
 	path = events
 	url = git@github.com:uwine-fr/events.git
+[submodule "portfolio_extras"]
+	path = portfolio_extras
+	url = git@github.com:uwine-fr/portfolio_extras.git
