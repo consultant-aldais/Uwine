@@ -16,3 +16,6 @@
 [submodule "portfolio_extras"]
 	path = portfolio_extras
 	url = git@github.com:uwine-fr/portfolio_extras.git
+[submodule "stock_extras"]
+	path = stock_extras
+	url = git@github.com:uwine-fr/stock_extras.git
