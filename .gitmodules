@@ -19,3 +19,6 @@
 [submodule "stock_extras"]
 	path = stock_extras
 	url = git@github.com:uwine-fr/stock_extras.git
+[submodule "uwine-events"]
+	path = uwine-events
+	url = git@github.com:uwine-fr/uwine-events.git
