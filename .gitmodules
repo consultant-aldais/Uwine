@@ -25,3 +25,6 @@
 [submodule "shop-manager"]
 	path = shop-manager
 	url = git@github.com:uwine-fr/shop-manager.git
+[submodule "gca"]
+	path = gca
+	url = git@github.com:uwine-fr/gca.git
