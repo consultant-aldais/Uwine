@@ -28,3 +28,6 @@
 [submodule "gca"]
 	path = gca
 	url = git@github.com:uwine-fr/gca.git
+[submodule "web_advanced_search"]
+	path = web_advanced_search
+	url = git@github.com:uwine-fr/web_advanced_search.git
