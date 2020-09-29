@@ -28,3 +28,6 @@
 [submodule "web_advanced_search"]
 	path = web_advanced_search
 	url = git@github.com:uwine-fr/web_advanced_search.git
+[submodule "shop_manager"]
+	path = shop_manager
+	url = git@github.com:uwine-fr/shop_manager.git
