@@ -1,0 +1,361 @@
+<odoo>
+    <data>
+
+
+<!--        Add in the portfolio view -->
+
+<!--        Name est l'ID de l'action "Portfolio quantities reports"-->
+<!--        <button type="action" name="XXX" colspan="2" class="oe_highlight" string="Quantities report" icon="fa-balance-scale"-->
+<!--                context="{'default_portfolio': active_id, 'default_portfolio_selection': 1, 'default_report_selection': 1}"-->
+<!--                attrs="{'invisible': [('x_studio_tw_portefeuille_statut', 'in', ['futur', 'cloture'])]}"/>-->
+
+        <template id="assets_backend" name="portfolio_extras assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/portfolio_extras/static/src/js/pivot_qty_widget.js"/>
+                <script type="text/javascript" src="/portfolio_extras/static/src/js/extras_ace.js"/>
+            </xpath>
+        </template>
+
+        <!-- Views for the wizard-->
+        <record id="view_portfolio_report_wizard" model="ir.ui.view">
+            <field name="name">Portfolio quantities reports</field>
+            <field name="model">portfolio_extras.portfolio_report_wizard</field>
+            <field name="arch" type="xml">
+                <form string="Report for">
+                    <group>
+                        <group>
+                            <field name="portfolio_selection" widget="radio" string="Make report for"/>
+                            <field name="portfolio" attrs="{'invisible': [('portfolio_selection', '!=', 1)]}"/>
+                            <field name="search" attrs="{'invisible': [('portfolio_selection', '!=', 2)]}"/>
+                            <field name="report_selection" widget="radio" string="Compare"/>
+
+                        </group>
+                    </group>
+                    <span attrs="{'invisible': [('portfolio_selection', '!=', 0)]}"><span class="fa fa-warning"/> Building a report for all portfolios can take several minutes</span>
+                    <footer>
+                        <button name="compute" string="Make report" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_portfolio_report_wizard" model="ir.actions.act_window">
+            <field name="name">Portfolio quantities reports</field>
+            <field name="res_model">portfolio_extras.portfolio_report_wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_portfolio_report_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+        <record id="action_portfolio_report_wizard_default" model="ir.actions.act_window">
+            <field name="name">Portfolio quantities reports</field>
+            <field name="res_model">portfolio_extras.portfolio_report_wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_portfolio_report_wizard"/>
+            <field name="target">new</field>
+            <field name="context">{'default_portfolio_selection': 0, 'default_report_selection': 1}</field>
+        </record>
+
+        <!-- Views for the report details-->
+        <record model="ir.ui.view" id="portfolio_extras.details_list">
+            <field name="name">Portfolios report</field>
+            <field name="model">portfolio_extras.portfolio_report_line</field>
+            <field name="arch" type="xml">
+                <tree create="0" edit="0"
+                      decoration-danger="diff != 0"
+                      decoration-success="diff == 0">
+                    <field name="portfolio"/>
+                    <field name="portfolio_type"/>
+                    <field name="product"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="price"/>
+                    <field name="bottling"/>
+                    <field name="bottling_qty"/>
+
+                    <field name="to_receive_qty"/>
+                    <field name="in_stock_qty"/>
+                    <field name="to_divest_qty"/>
+                    <field name="to_consume_qty"/>
+                    <field name="valuation_l"/>
+                    <field name="valuation_m"/>
+                    <field name="valuation_h"/>
+
+                    <field name="divested_qty"/>
+                    <field name="divested_valuation"/>
+
+                    <field name="consumed_qty"/>
+                    <field name="consumed_valuation"/>
+
+                    <field name="diff" widget="pivot_qty_widget" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="portfolio_extras.details_form">
+            <field name="name">Portfolios report details</field>
+            <field name="model">portfolio_extras.portfolio_report_line</field>
+            <field name="arch" type="xml">
+                <form create="0" delete="0" edit="0">
+                    <sheet string="Portfolio report details">
+                        <group>
+                            <group>
+                                <field name="portfolio"/>
+                                <field name="portfolio_type"/>
+                                <field name="product"/>
+                                <field name="bottling"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="price"/>
+                            </group>
+                            <group/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="bottling_qty"/>
+                                <field name="to_receive_qty"/>
+                                <field name="in_stock_qty"/>
+                                <field name="to_divest_qty"/>
+                                <field name="to_consume_qty"/>
+                                <field name="divested_qty"/>
+                                <field name="consumed_qty"/>
+                                <field name="diff" invisible="1"/>
+                            </group>
+                            <group col="4">
+                                <field name="valuation_l"/><span><field name="perf_l" widget="percentage" nolabel="1"/></span>
+                                <field name="valuation_m"/><span><field name="perf_m" widget="percentage" nolabel="1"/></span>
+                                <field name="valuation_h"/><span><field name="perf_h" widget="percentage" nolabel="1"/></span>
+                                <field name="divested_valuation" attrs="{'invisible': [['divested_qty','=', 0]]}"/>
+                                <span attrs="{'invisible': [['divested_qty','=', 0]]}"><field name="perf_divested" widget="percentage" nolabel="1"/></span>
+                                <field name="consumed_valuation"  attrs="{'invisible': [['consumed_qty','=', 0]]}"/>
+                            </group>
+                            <group/>
+                        </group>
+                        <div style="text-align: center; color:green; background: #d3ffd8; padding: 15px 20px; background-clip: border-box; border-radius: 2px;"
+                              attrs="{'invisible': [['diff','!=', 0]]}">
+                            Quantity is OK
+                        </div>
+
+                        <div style="text-align: center; color:red; background: #ffd3db; padding: 15px 20px; background-clip: border-box; border-radius: 2px;"
+                              attrs="{'invisible': [['diff','=', 0]]}">
+                            Quantity is not OK
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="portfolio_extras.details_search" model="ir.ui.view">
+            <field name="name">Portfolios report details search view</field>
+            <field name="model">portfolio_extras.portfolio_report_line</field>
+            <field eval="10" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Portfolio report">
+                    <field name="portfolio"/>
+                    <field name="portfolio_type"/>
+                    <field name="product"/>
+                    <field name="bottling"/>
+                    <field name="portfolio" string="Portfolio year" filter_domain="[('portfolio.x_studio_tw_portefeuille_annee', '=', self)]" />
+                    <field name="portfolio" string="Portfolio year &lt;=" filter_domain="[('portfolio.x_studio_tw_portefeuille_annee', '&lt;=', self)]" />
+                    <field name="portfolio" string="Portfolio year &gt;=" filter_domain="[('portfolio.x_studio_tw_portefeuille_annee', '&gt;=', self)]" />
+                    <field name="product_template" string="Vintage" filter_domain="[('product_template.x_studio_tw_template_millesime', '=', self)]" />
+                    <field name="product_template" string="Vintage &lt;=" filter_domain="[('product_template.x_studio_tw_template_millesime', '&lt;=', self)]" />
+                    <field name="product_template" string="Vintage &gt;=" filter_domain="[('product_template.x_studio_tw_template_millesime', '&gt;=', self)]" />
+                    <filter name="with_error" string="Mismatching quantities" domain="[('diff', '!=', 0)]"/>
+                    <separator />
+                    <filter name="no_valuation" string="No valuation" domain="[('no_valuation', '=', True)]"/>
+                    <separator />
+                    <filter name="cellar_management" string="Cellar Management" domain="[('portfolio.x_studio_tw_portefeuille_type', '=', 'cellar_management')]"/>
+                    <filter name="storage" string="Storage" domain="[('portfolio.x_studio_tw_portefeuille_type', '=', 'storage')]"/>
+                    <filter name="primeurs" string="Primeurs" domain="[('portfolio.x_studio_tw_portefeuille_type', '=', 'primeur')]"/>
+                    <filter name="allocations" string="Allocations" domain="[('portfolio.x_studio_tw_portefeuille_type', '=', 'allocation')]"/>
+                    <filter name="opportunities" string="Opportunities" domain="[('portfolio.x_studio_tw_portefeuille_type', '=', 'opportunity')]"/>
+                    <group expand='0' string='Group by...'>
+                        <filter string='Portfolio' name="portfolio" domain="[]" context="{'group_by' : 'portfolio'}"/>
+                        <filter string='Product template' name="template" domain="[]"
+                                context="{'group_by' : 'product_template'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="portfolio_extras.details_pivot">
+            <field name="name">Portfolios report pivot</field>
+            <field name="model">portfolio_extras.portfolio_report_line</field>
+            <field name="arch" type="xml">
+                <pivot string="Portfolio report"
+                       default_order="portfolio asc, product_template asc, bottling asc">
+                    <field name="portfolio" type="row"/>
+                    <field name="product_template" type="row"/>
+                    <!-- <field name="bottling" type="row"/>-->
+
+                    <field name="product" invisible="1"/>
+                    <field name="bottling_eq75_qty" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="price" invisible="1"/>
+                    <field name="valuation_l" invisible="1"/>
+                    <field name="valuation_m" invisible="1"/>
+                    <field name="valuation_h" invisible="1"/>
+                    <field name="divested_valuation" invisible="1"/>
+                    <field name="consumed_valuation" invisible="1"/>
+
+                    <field name="bottling_qty" type="measure" widget="pivot_qty_simple"/>
+                    <field name="to_receive_qty" type="measure" widget="pivot_qty_simple"/>
+                    <field name="in_stock_qty" type="measure" widget="pivot_qty_simple"/>
+                    <field name="divested_qty" type="measure" widget="pivot_qty_simple"/>
+                    <field name="consumed_qty" type="measure" widget="pivot_qty_simple"/>
+                    <field name="diff" type="measure" widget="pivot_qty_widget"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Views for the report: affectation vs. bottling -->
+        <record model="ir.ui.view" id="portfolio_extras.report_list">
+            <field name="name">Portfolios report (affectation vs. bottling)</field>
+            <field name="model">portfolio_extras.portfolio_report</field>
+            <field name="arch" type="xml">
+                <tree create="0" edit="0"
+                      decoration-danger="diff != 0 or diff_bottling != 0"
+                      decoration-success="diff == 0 and diff_bottling == 0">
+                    <field name="portfolio"/>
+                    <field name="product_tmpl"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="price" />
+                    <field name="affected_eq75"/>
+                    <field name="bottled_eq75"/>
+                    <field name="diff" widget="pivot_qty_widget" />
+                    <field name="diff_bottling" widget="pivot_qty_widget" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="portfolio_extras.report_form">
+            <field name="name">Portfolios report (affectation vs. bottling)</field>
+            <field name="model">portfolio_extras.portfolio_report</field>
+            <field name="arch" type="xml">
+                <form create="0" delete="0" edit="0">
+                    <sheet string="Portfolio report">
+                        <group>
+                            <group>
+                                <field name="portfolio"/>
+                                <field name="product_tmpl"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="price" />
+                                <separator/>
+                                <field name="affected_eq75"/>
+                                <field name="bottled_eq75"/>
+                            </group>
+                            <group></group>
+                            <field name="details" />
+                            <field name="diff" invisible="1"/>
+                            <field name="diff_bottling" invisible="1"/>
+
+                        </group>
+                        <div style="text-align: center; color:green; background: #d3ffd8; padding: 15px 20px; background-clip: border-box; border-radius: 2px;"
+                             attrs="{'invisible': [['diff','!=', 0]]}">
+                            Affectations eq75 vs. Bottling eq75 is OK
+                        </div>
+
+                        <div style="text-align: center; color:red; background: #ffd3db; padding: 15px 20px; background-clip: border-box; border-radius: 2px;"
+                             attrs="{'invisible': [['diff','=', 0]]}">
+                            Affectations eq75 vs. Bottling eq75 is not OK
+                        </div>
+                        <br/>
+                        <div style="text-align: center; color:green; background: #d3ffd8; padding: 15px 20px; background-clip: border-box; border-radius: 2px;"
+                             attrs="{'invisible': [['diff_bottling','!=', 0]]}">
+                            Bottling vs. stock quantities is OK
+                        </div>
+
+                        <div style="text-align: center; color:red; background: #ffd3db; padding: 15px 20px; background-clip: border-box; border-radius: 2px;"
+                             attrs="{'invisible': [['diff_bottling','=', 0]]}">
+                            Bottling vs. stock quantities is not OK
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="portfolio_extras.report_search" model="ir.ui.view">
+            <field name="name">Portfolios report search view</field>
+            <field name="model">portfolio_extras.portfolio_report</field>
+            <field eval="10" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Portfolio report">
+                    <field name="portfolio"/>
+                    <field name="product_tmpl"/>
+                    <filter name="with_error" string="Mismatching affectations vs. bottling" domain="[('diff', '!=', 0)]"/>
+                    <filter name="with_error2" string="Mismatching bottling vs. stocks" domain="['|', ('diff', '!=', 0), ('diff_bottling', '!=', 0)]"/>
+                    <separator />
+                    <filter name="cellar_management" string="Cellar Management" domain="[('portfolio.x_studio_tw_portefeuille_type', '=', 'cellar_management')]"/>
+                    <filter name="storage" string="Storage" domain="[('portfolio.x_studio_tw_portefeuille_type', '=', 'storage')]"/>
+                    <filter name="primeurs" string="Primeurs" domain="[('portfolio.x_studio_tw_portefeuille_type', '=', 'primeur')]"/>
+                    <filter name="allocations" string="Allocations" domain="[('portfolio.x_studio_tw_portefeuille_type', '=', 'allocation')]"/>
+                    <filter name="opportunities" string="Opportunities" domain="[('portfolio.x_studio_tw_portefeuille_type', '=', 'opportunity')]"/>
+                    <group expand='0' string='Group by...'>
+                        <filter string='Portfolio' name="portfolio" domain="[]" context="{'group_by' : 'portfolio'}"/>
+                        <filter string='Product template' name="template" domain="[]"
+                                context="{'group_by' : 'product_tmpl'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="portfolio_extras.report_pivot">
+            <field name="name">Portfolios report pivot</field>
+            <field name="model">portfolio_extras.portfolio_report</field>
+            <field name="arch" type="xml">
+                <pivot string="Portfolio report"
+                       default_order="portfolio asc, product_tmpl asc">
+                    <field name="portfolio" type="row"/>
+                    <field name="product_tmpl" type="row"/>
+
+                    <field name="details" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="price" invisible="1"/>
+
+                    <field name="affected_eq75" type="measure" widget="pivot_qty_simple"/>
+                    <field name="bottled_eq75" type="measure" widget="pivot_qty_simple"/>
+                    <field name="diff" type="measure" widget="pivot_qty_widget" />
+                    <field name="diff_bottling" type="measure" widget="pivot_qty_widget" />
+                </pivot>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_report_list">
+            <field name="name">Affectation vs. bottling</field>
+            <field name="res_model">portfolio_extras.portfolio_report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,pivot,form</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_report_details_list">
+            <field name="name">Portfolios stocks</field>
+            <field name="res_model">portfolio_extras.portfolio_report_line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,pivot,form</field>
+        </record>
+
+
+        <menuitem id="portfolio_reports"
+                  name="Portfolio reports"
+                  parent="studio_customization.mandats_de_gestion_5e546067-6f1b-4702-ac18-ac43f81d7e9c"
+                  sequence="100" />
+
+        <menuitem id="portfolio_report"
+                  parent="portfolio_reports"
+                  name="Build reports"
+                  action="action_portfolio_report_wizard_default"/>
+        <menuitem id="view_portfolio_report"
+                  parent="portfolio_reports"
+                  name="Affectation vs. bottling"
+                  action="action_report_list"/>
+        <menuitem id="view_portfolio_report_details"
+                  parent="portfolio_reports"
+                  name="Portfolios stocks"
+                  action="action_report_details_list"/>
+
+    </data>
+</odoo>

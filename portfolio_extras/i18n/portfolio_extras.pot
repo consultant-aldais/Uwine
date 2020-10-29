@@ -1,0 +1,825 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* portfolio_extras
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e-20200121\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-04-10 16:36+0000\n"
+"PO-Revision-Date: 2020-04-10 16:36+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.external_layout_portfolio_report
+msgid "13 Allées de Chartres - 33000 Bordeaux - +33 (0)5 35 54 61 39<br/>"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.view_portfolio_report_wizard
+msgid "<span attrs=\"{'invisible': [('portfolio_selection', '!=', 0)]}\"><span class=\"fa fa-warning\"/> Building a report for all portfolios can take several minutes</span>"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.view_valuation_wizard
+msgid "<span attrs=\"{'invisible': [('valuation_selection', '!=', 0)]}\"><span class=\"fa fa-warning\"/> Rebuilding all valuations can take several minutes</span>"
+msgstr ""
+
+#. module: portfolio_extras
+#: selection:portfolio_extras.valuation_wizard,valuation_selection:0
+msgid "A product"
+msgstr ""
+
+#. module: portfolio_extras
+#: selection:portfolio_extras.portfolio_report_wizard,portfolio_selection:0
+msgid "A specific portfolio"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.actions.act_window,name:portfolio_extras.action_report_list
+#: model:ir.ui.menu,name:portfolio_extras.view_portfolio_report
+msgid "Affectation vs. bottling"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_form
+msgid "Affectations eq75 vs. Bottling eq75 is OK"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_form
+msgid "Affectations eq75 vs. Bottling eq75 is not OK"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report__affected_eq75
+msgid "Affected eq. 75"
+msgstr ""
+
+#. module: portfolio_extras
+#: selection:portfolio_extras.portfolio_report_wizard,portfolio_selection:0
+msgid "All portfolios"
+msgstr ""
+
+#. module: portfolio_extras
+#: selection:portfolio_extras.valuation_wizard,valuation_selection:0
+msgid "All valuations"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_search
+msgid "Allocations"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Annex: bottling"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__divested_valuation
+msgid "Average valuation (sold)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "B2B Valuation"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "B2C Valuation<br/>(U'Wine model)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation__b2c
+msgid "B2C price"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation__b2c_hk
+msgid "B2C price (HK)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Bottle size"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Bottles per case"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__bottling
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Bottling"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__bottling_eq75_qty
+msgid "Bottling EQ75"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report__bottled_eq75
+msgid "Bottling eq. 75"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_form
+msgid "Bottling vs. stock quantities is OK"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_form
+msgid "Bottling vs. stock quantities is not OK"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Bought<br/>(bt)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.ui.menu,name:portfolio_extras.portfolio_report
+msgid "Build reports"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report__price
+msgid "Buying price"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Buying price<br/>(unit/total)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.view_portfolio_report_wizard
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.view_valuation_wizard
+msgid "Cancel"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Case"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Cash Received"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_search
+msgid "Cellar Management"
+msgstr ""
+
+#. module: portfolio_extras
+#: selection:portfolio_extras.portfolio_report_wizard,report_selection:0
+msgid "Check affectations vs. bottling"
+msgstr ""
+
+#. module: portfolio_extras
+#: selection:portfolio_extras.valuation_wizard,report_selection:0
+msgid "Check bottling vs. stocks"
+msgstr ""
+
+#. module: portfolio_extras
+#: selection:portfolio_extras.valuation_wizard,report_selection:0
+msgid "Check everything: affectations, bottling and stocks"
+msgstr ""
+
+#. module: portfolio_extras
+#: selection:portfolio_extras.portfolio_report_wizard,report_selection:0
+msgid "Check stocks"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.view_portfolio_report_wizard
+msgid "Compare"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__consumed_qty
+msgid "Consumed"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report__create_uid
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__create_uid
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_wizard__create_uid
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation__create_uid
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation_wizard__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report__create_date
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__create_date
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_wizard__create_date
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation__create_date
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation_wizard__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report__currency_id
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__currency_id
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation__currency_id
+msgid "Currency"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Customer contact: Camille Viacroze - camille.viacroze@uwine.fr"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation__date
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.valuation_search
+msgid "Date"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Delivered wines"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Delivered<br/>(bt)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report__details
+msgid "Details"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__diff
+msgid "Difference"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report__diff
+msgid "Difference (aff. vs. bottling)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report__diff_bottling
+msgid "Difference (bottling vs. stocks)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report__display_name
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__display_name
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_wizard__display_name
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation__display_name
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation_wizard__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "En-Primeur"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__price
+msgid "Entry price"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Entry value"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Fees (provision)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Fees (real)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_wizard__search
+msgid "Filter portfolios by name"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation_wizard__date_min
+msgid "From"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_search
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.valuation_search
+msgid "Group by..."
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report__id
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__id
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_wizard__id
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation__id
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "In stock<br/>(bt)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report____last_update
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line____last_update
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_wizard____last_update
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation____last_update
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation_wizard____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report__write_uid
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__write_uid
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_wizard__write_uid
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation__write_uid
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation_wizard__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report__write_date
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__write_date
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_wizard__write_date
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation__write_date
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation_wizard__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Latent Performance<br/>(B2B)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Latent Performance<br/>(B2C)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.external_layout_portfolio_report
+msgid "Logo"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.view_portfolio_report_wizard
+msgid "Make report"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.view_portfolio_report_wizard
+msgid "Make report for"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.actions.report,name:portfolio_extras.report_pf_stock_report
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Management report"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_search
+msgid "Mismatching affectations vs. bottling"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_search
+msgid "Mismatching bottling vs. stocks"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+msgid "Mismatching quantities"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation__name
+msgid "Name"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__no_valuation
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+msgid "No valuation"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_search
+msgid "Opportunities"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Original Wooden Case"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Original cardboard box"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Perf."
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Performance achieved"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report__portfolio
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__portfolio
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_wizard__portfolio
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_search
+msgid "Portfolio"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.actions.server,name:portfolio_extras.portfolio_report_cron_ir_actions_server
+#: model:ir.cron,cron_name:portfolio_extras.portfolio_report_cron
+#: model:ir.cron,name:portfolio_extras.portfolio_report_cron
+msgid "Portfolio Extras: Rebuild portfolio reports"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.actions.server,name:portfolio_extras.valuation_cron_ir_actions_server
+#: model:ir.cron,cron_name:portfolio_extras.valuation_cron
+#: model:ir.cron,name:portfolio_extras.valuation_cron
+msgid "Portfolio Extras: Rebuild product valuations"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_wizard__portfolio_selection
+msgid "Portfolio Selection"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model,name:portfolio_extras.model_portfolio_extras_portfolio_report
+msgid "Portfolio quantities report"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model,name:portfolio_extras.model_portfolio_extras_portfolio_report_line
+msgid "Portfolio quantities report details"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.actions.act_window,name:portfolio_extras.action_portfolio_report_wizard
+#: model:ir.actions.act_window,name:portfolio_extras.action_portfolio_report_wizard_default
+msgid "Portfolio quantities reports"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_pivot
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_form
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pivot
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_search
+msgid "Portfolio report"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_form
+msgid "Portfolio report details"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.ui.menu,name:portfolio_extras.portfolio_reports
+msgid "Portfolio reports"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+msgid "Portfolio year"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+msgid "Portfolio year <="
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+msgid "Portfolio year >="
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.actions.act_window,name:portfolio_extras.action_report_details_list
+#: model:ir.ui.menu,name:portfolio_extras.view_portfolio_report_details
+msgid "Portfolios stocks"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_search
+msgid "Primeurs"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation__pp
+msgid "Prix place"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__product
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.valuation_search
+msgid "Product"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report__product_tmpl
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__product_template
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation__product_template
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation_wizard__product_template
+msgid "Product Template"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_search
+msgid "Product template"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Qty<br/>(bt)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_form
+msgid "Quantity is OK"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_form
+msgid "Quantity is not OK"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__perf_h
+msgid "Raw perf (high)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__perf_l
+msgid "Raw perf (low)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__perf_m
+msgid "Raw perf (median)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__perf_divested
+msgid "Raw perf (sold)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.view_valuation_wizard
+msgid "Rebuild"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.actions.act_window,name:portfolio_extras.action_valuation_wizard
+#: model:ir.ui.menu,name:portfolio_extras.valuation_report
+msgid "Rebuild valuations"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.view_valuation_wizard
+msgid "Rebuild valuations for"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__report
+msgid "Report"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_wizard__report_selection
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation_wizard__report_selection
+msgid "Report Selection"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.view_portfolio_report_wizard
+msgid "Report for"
+msgstr ""
+
+#. module: portfolio_extras
+#: selection:portfolio_extras.portfolio_report_wizard,portfolio_selection:0
+msgid "Several portfolios"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__divested_qty
+msgid "Sold"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Sold price<br/>(unit/total)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Sold wines"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Sold<br/>(bt)"
+msgstr ""
+
+#. module: portfolio_extras
+#: selection:portfolio_extras.valuation_wizard,valuation_selection:0
+msgid "Specific date(s)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__in_stock_qty
+msgid "Stock"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__to_consume_qty
+msgid "Stock to deliver"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__to_divest_qty
+msgid "Stock to divest"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Stock valuation B2B<br/>(unit/total)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Stock valuation B2C<br/>(unit/total)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_search
+msgid "Storage"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__bottling_qty
+msgid "Theoretical"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation_wizard__date_max
+msgid "To"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "To be received<br/>(bt)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__to_receive_qty
+msgid "To receive"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Total"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model,name:portfolio_extras.model_portfolio_extras_valuation
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.valuation_graph
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.valuation_search
+msgid "Valuation"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__consumed_valuation
+msgid "Valuation (consumed)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__valuation_h
+msgid "Valuation (high)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__valuation_l
+msgid "Valuation (low)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_portfolio_report_line__valuation_m
+msgid "Valuation (median)"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model.fields,field_description:portfolio_extras.field_portfolio_extras_valuation_wizard__valuation_selection
+msgid "Valuation Selection"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.actions.act_window,name:portfolio_extras.action_valuation_list
+#: model:ir.ui.menu,name:portfolio_extras.view_valuations
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.view_valuation_wizard
+msgid "Valuations"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.ui.menu,name:portfolio_extras.view_valuations_sources
+msgid "Valuations sources"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+msgid "Vintage"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+msgid "Vintage <="
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.details_search
+msgid "Vintage >="
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Wine"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Wines bought"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Wines in stock"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model,name:portfolio_extras.model_portfolio_extras_portfolio_report_wizard
+msgid "Wizard for portfolio quantities report"
+msgstr ""
+
+#. module: portfolio_extras
+#: model:ir.model,name:portfolio_extras.model_portfolio_extras_valuation_wizard
+msgid "Wizard for updating valuations"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "Your U'Wine portfolios"
+msgstr ""
+
+#. module: portfolio_extras
+#: model_terms:ir.ui.view,arch_db:portfolio_extras.report_pf_stock_document
+msgid "to"
+msgstr ""
+

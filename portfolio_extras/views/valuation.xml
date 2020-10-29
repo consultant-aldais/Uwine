@@ -1,0 +1,143 @@
+<odoo>
+    <data>
+
+
+<!--        Add in the portfolio view -->
+
+<!--        <button type="action" name="XXX" colspan="2" class="oe_highlight" string="Quantities report" icon="fa-balance-scale"-->
+<!--                context="{'default_portfolio': active_id, 'default_portfolio_selection': 1, 'default_report_selection': 0}"-->
+<!--                attrs="{'invisible': [('x_studio_tw_portefeuille_statut', 'in', ['futur', 'cloture'])]}"/>-->
+
+
+        <!-- Views for the wizard-->
+        <record id="view_valuation_wizard" model="ir.ui.view">
+            <field name="name">Rebuild valuations</field>
+            <field name="model">portfolio_extras.valuation_wizard</field>
+            <field name="arch" type="xml">
+                <form string="Valuations">
+                    <group>
+                        <group>
+                            <field name="valuation_selection" widget="radio" string="Rebuild valuations for"/>
+                            <field name="product_template" attrs="{'invisible': [('valuation_selection', '!=', 1)]}"/>
+                            <field name="date_min" attrs="{'invisible': [('valuation_selection', '!=', 2)]}"/>
+                            <field name="date_max" attrs="{'invisible': [('valuation_selection', '!=', 2)]}"/>
+                        </group>
+                    </group>
+                    <span attrs="{'invisible': [('valuation_selection', '!=', 0)]}"><span class="fa fa-warning"/> Rebuilding all valuations can take several minutes</span>
+                    <footer>
+                        <button name="compute" string="Rebuild" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_valuation_wizard" model="ir.actions.act_window">
+            <field name="name">Rebuild valuations</field>
+            <field name="res_model">portfolio_extras.valuation_wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_valuation_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+        <!-- Views for the valuations -->
+        <record model="ir.ui.view" id="portfolio_extras.valuation_list">
+            <field name="name">Valuations</field>
+            <field name="model">portfolio_extras.valuation</field>
+            <field name="arch" type="xml">
+                <tree create="0" edit="0" delete="0">
+                    <field name="product_template"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="date"/>
+                    <field name="pp"/>
+                    <field name="b2c"/>
+                    <field name="b2c_hk"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="portfolio_extras.valuation_form">
+            <field name="name">Valuation</field>
+            <field name="model">portfolio_extras.valuation</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group col="2">
+                            <group>
+                                <field name="product_template"/>
+                                <field name="date"/>
+                                <field name="pp"/>
+                                <field name="b2c"/>
+                                <field name="b2c_hk"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="portfolio_extras.valuation_search" model="ir.ui.view">
+            <field name="name">Valuation search view</field>
+            <field name="model">portfolio_extras.valuation</field>
+            <field eval="10" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Valuation">
+                    <field name="product_template"/>
+                    <field name="date"/>
+                    <group expand='0' string='Group by...'>
+                        <filter string='Date' name="date" domain="[]" context="{'group_by' : 'date'}"/>
+                        <filter string='Product' name="product" domain="[]"
+                                context="{'group_by' : 'product_template'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="portfolio_extras.valuation_graph" model="ir.ui.view">
+            <field name="name">Valuation graph</field>
+            <field name="model">portfolio_extras.valuation</field>
+            <field name="arch" type="xml">
+                <graph string="Valuation" type="line">
+                    <field name="pp" type="measure"/>
+                    <field name="date" interval="month" type="row"/>
+                    <field name="product_template" type="row"/>
+                </graph>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_valuation_list">
+            <field name="name">Valuations</field>
+            <field name="res_model">portfolio_extras.valuation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+        </record>
+
+
+        <!-- Replace the current menu item by a 'top menu' -->
+        <menuitem id="studio_customization.articles_valorisatio_66bea97f-9fa4-48da-94d5-b47ecd0198fc"
+                  parent="studio_customization.articles_031756be-8386-439d-a313-7408908426a1"
+                  name="Products Valuations" />
+
+        <menuitem id="view_valuations_sources"
+                  parent="studio_customization.articles_valorisatio_66bea97f-9fa4-48da-94d5-b47ecd0198fc"
+                  name="Valuations sources"
+                  action="studio_customization.valorisation_article_c7092f72-d0eb-4fc0-93eb-b6173b4d2e67"
+                  sequence="10" />
+
+        <menuitem id="view_valuations"
+                  parent="studio_customization.articles_valorisatio_66bea97f-9fa4-48da-94d5-b47ecd0198fc"
+                  name="Valuations"
+                  action="action_valuation_list"
+                  sequence="20" />
+
+        <menuitem id="valuation_report"
+                  parent="studio_customization.articles_valorisatio_66bea97f-9fa4-48da-94d5-b47ecd0198fc"
+                  name="Rebuild valuations"
+                  action="action_valuation_wizard"
+                  sequence="30"/>
+
+    </data>
+</odoo>

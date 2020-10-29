@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_portfolio_extras_report_,portfolio_extras.portfolio_report,model_portfolio_extras_portfolio_report,base.group_user,1,1,1,1
+access_portfolio_extras_report_line,portfolio_extras.portfolio_report_line,model_portfolio_extras_portfolio_report_line,base.group_user,1,1,1,1
+access_portfolio_extras_valuation,portfolio_extras.valuation,model_portfolio_extras_valuation,base.group_user,1,1,1,1
+

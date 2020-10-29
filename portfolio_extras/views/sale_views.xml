@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="sale.action_orders_to_invoice" model="ir.actions.act_window">
+        <field name="name">Orders to Invoice</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,calendar,graph,pivot,kanban,activity</field>
+        <field name="context">{'create': False}</field>
+        <field name="domain">[('invoice_status','=','to invoice'), ('all_delivered', '=', True)]</field>
+        <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No orders to invoice found
+            </p><p>
+            You can select all orders and invoice them in batch,<br/>
+            or check every order and invoice them one by one.
+        </p>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="sale_order_send_wizard_form">
+        <field name="name">portfolio_extras.sale.order.send.form</field>
+        <field name="model">portfolio_extras.sale.order.send</field>
+        <field name="groups_id" eval="[(4,ref('base.group_user'))]"/>
+        <field name="arch" type="xml">
+            <form string="Sale order send">
+                <!-- truly invisible fields for control and options -->
+                <field name="composition_mode" invisible="1"/>
+                <field name="composer_id" invisible="1"/>
+                <field name="order_ids" invisible="1"/>
+                <field name="email_from" invisible="1" />
+                <field name="mail_server_id" invisible="1"/>
+                <div class="text-left d-inline-block mr8" attrs="{'invisible': [('order_without_email', '=', False)]}">
+                    <field name="order_without_email" class="mr4"/>
+                </div>
+                <div name="mail_form">
+                    <!-- visible wizard -->
+                    <div attrs="{'invisible': [('composition_mode', '=', 'mass_mail')]}">
+                        <group>
+                            <label for="partner_ids" string="Recipients" groups="base.group_user"/>
+                            <div groups="base.group_user">
+                                <span attrs="{'invisible': [('composition_mode', '!=', 'mass_mail')]}">
+                                    <strong>Email mass mailing</strong> on
+                                    <span>the selected records</span>
+                                </span>
+                                <span>Followers of the document and</span>
+                                <field name="partner_ids" widget="many2many_tags_email" placeholder="Add contacts to notify..."
+                                       context="{'force_email':True, 'show_email':True}" attrs="{'invisible': [('composition_mode', '=', 'mass_mail')]}"/>
+                            </div>
+                            <field name="subject" placeholder="Subject..." attrs="{'required': [('composition_mode', '=', 'comment')]}"/>
+                        </group>
+                        <field name="body" style="border:none;" options="{'style-inline': true}"/>
+                    </div>
+                    <group>
+                        <group attrs="{'invisible': [('composition_mode', '=', 'mass_mail')]}">
+                            <field name="attachment_ids" widget="many2many_binary" string="Attach a file" nolabel="1" colspan="2" attrs="{'invisible': [('composition_mode', '=', 'mass_mail')]}"/>
+                        </group>
+                        <group>
+                            <field name="template_id" options="{'no_create': True, 'no_edit': True}"
+                                   context="{'default_model': 'sale.order'}"/>
+                        </group>
+                    </group>
+                </div>
+
+                <footer>
+                    <button string="Send"
+                            name="send_action" type="object" class="send btn-primary o_mail_send"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window
+            name="Send"
+            id="sale_order_send"
+            multi="True"
+            key2="client_action_multi"
+            res_model="portfolio_extras.sale.order.send"
+            src_model="sale.order"
+            view_mode="form"
+            target="new"
+            view_type="form"
+            context="{
+                    'custom_layout': 'mail.mail_notification_paynow',
+                    'default_composition_mode': 'comment'
+                }"
+    />
+
+
+
+</odoo>

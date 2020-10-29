@@ -1,0 +1,984 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+<!--        Replace external layout for pf reports-->
+        <template id="external_layout_portfolio_report">
+
+            <t t-if="not company">
+                <!-- Multicompany -->
+                <t t-if="company_id">
+                    <t t-set="company" t-value="company_id"/>
+                </t>
+                <t t-elif="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id.sudo()"/>
+                </t>
+                <t t-else="else">
+                    <t t-set="company" t-value="res_company"/>
+                </t>
+            </t>
+
+            <div class="header">
+                <div class="o_background_header">
+                    <table style="width: 100%; vertical-align: middle; margin: 6px 0; color: #a5843b;">
+                        <tr>
+                            <td style="width: 33%; text-align: left;"><img alt="Logo" t-att-src="image_data_uri(company.logo)" style="max-height: 35px;"/></td>
+                            <td style="width: 33%; font-size: 16px; font-weight: bold; text-align: center; text-transform: uppercase;"><t t-esc="title" /></td>
+                            <td style="width: 33%; font-size: 10px; text-align: right; vertical-align: middle;">
+                                13 Allées de Chartres - 33000 Bordeaux - +33 (0)5 35 54 61 39<br/>
+                                <t t-esc="customer_contact" />
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+
+            <div class="article"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+                <t t-raw="0"/>
+            </div>
+
+            <div class="footer">
+                <style>
+                    body {
+                        font-family: Lato, "Noto", "Lucida Grande", Helvetica, Verdana, Arial, sans-serif;
+                        font-size: 10px;
+                        text-rendering: geometricPrecision;
+                    }
+                </style>
+                <div t-if="report_type == 'pdf'" style="text-align: center;">
+                    <span class="page" /> / <span class="topage" />
+                </div>
+            </div>
+        </template>
+
+        <template id="report_pf_stock_document">
+            <t t-set="title">
+                Management report
+            </t>
+            <t t-set="title" t-value="title + ' - ' + datetime.datetime.today().strftime('%x')" />
+            <t t-set="customer_contact">
+                Customer contact: Capucine Gindre - capucine.gindre@uwine.fr
+            </t>
+
+            <t t-call="portfolio_extras.external_layout_portfolio_report">
+                <div class="page">
+
+                    <t t-set="currency_id" t-value="docs[0].x_currency_id" />
+                    <t t-set="today" t-value="datetime.datetime.today()" />
+                    <t t-set="max_primeur_year" t-value="today.year - 3 if today.month &lt; 6 else today.year - 2" />
+<!--                    max_primeur_year is the year of the pf, ie. vintage + 1 -->
+
+                    <style>
+                        body {
+                            font-family: Lato, "Noto", "Lucida Grande", Helvetica, Verdana, Arial, sans-serif;
+                            font-size: 10px;
+                            text-rendering: geometricPrecision;
+                        }
+
+                        h2 {
+                            font-size: 18px;
+                            font-weight: bold;
+                        }
+
+                        /* avoid wkhtmltopdf breaking table layout on new pages */
+                        thead { display: table-header-group; page-break-inside: avoid;}
+                        tfoot { display: table-row-group; page-break-inside: avoid;}
+                        tr { page-break-inside: avoid; }
+
+                        table {
+                            table-layout: fixed;
+                            width: 100%;
+                            font-size: 10px;
+                        }
+
+                        table tr th {
+                            vertical-align: bottom;
+                            padding-left: 4px;
+                            padding-right: 4px;
+                            text-align: center;
+                            height: 25px; /* minimum! */
+                        }
+
+                        table tr td {
+                            vertical-align: middle;
+                            padding-left: 4px;
+                            padding-right: 4px;
+                            text-align: center;
+                            height: 25px; /* minimum! */
+                        }
+
+                        table.striped tbody,
+                        table.striped tfoot {
+                            border: solid 1px rgb(152, 122, 64);
+                        }
+
+                        table.striped tr td,
+                        table.striped tr th {
+                            border-left: none;
+                        }
+
+                        table.striped tbody tr:nth-child(odd) td {
+                            background-color: #f4ebde;
+                        }
+
+                        table.rowed tr,
+                        table th {
+                            border-bottom: solid 1px rgb(152, 122, 64) !important;
+                        }
+
+                        table tr td.qty,
+                        table tr th.qty {
+                            width: 45px;
+                        }
+
+                        table tr td.money,
+                        table tr th.money {
+                            width: 90px;
+                        }
+
+
+                        table.all_portfolios tr th.qty {
+                            width: 40px;
+                        }
+
+                        table.all_portfolios tr th.perf {
+                            width: 45px;
+                        }
+
+                        table.all_portfolios tr th.money {
+                            width: 80px;
+                        }
+
+
+                        table tr td.label,
+                        table tr th.label {
+                            text-align: left;
+                            padding-left:  12px;
+                            padding-right: 12px;
+                        }
+
+                        table tr th.smaller_header {
+                            font-size: 9px;
+                            padding-left: 1px;
+                            padding-right: 1px;
+                        }
+
+                        table tfoot {
+                            border-top: double 3px rgb(152, 122, 64) !important;
+                        }
+                        table tr.total td {
+                            color: #a5843b;
+                            font-weight: bold;
+                            background: none;
+                        }
+                        table.striped tbody tr.total:nth-child(odd) {
+                            background: none;
+                        }
+
+                        table.striped tr.all-borders td,
+                        table.striped tr.all-borders th {
+                            border: solid 1px rgb(152, 122, 64) !important;
+                            vertical-align: middle;
+                        }
+
+                        table.all_portfolios tr th {
+                            height: 25px; /* this is a minimum */
+                        }
+
+                        table.all_portfolios tr td {
+                            height: 40px; /* this is a minimum */
+                        }
+
+                        table.pres td {
+                            border: solid 1px rgb(152, 122, 64);
+                            text-align: left;
+                            font-size: 12px;
+                            padding: 6px 12px 6px 12px;
+                        }
+
+                        table tr.fake_header_row,
+                        table tr.fake_header_row td,
+                        table tr.fake_header_row th {
+                            height: 0px !important;
+                            border: none !important;
+                        }
+
+                        p {
+                            text-align: justify;
+                            font-size: 12px;
+                            margin-bottom: 6px;
+                        }
+
+                        .intro {
+                            color: #495057;
+                        }
+
+                    </style>
+
+                    <div class="intro" t-translation="off">
+                        <t t-if="lang == 'fr_FR'">
+                            <br/><br/>
+                            <h2>
+                                Notice de lecture
+                            </h2>
+                            <p>Le rapport de gestion ci-après comprend l'ensemble de vos portefeuilles MANDAT U'WINE.</p>
+                            <p>
+                                Concernant les <b>millésimes en primeur de moins de deux ans</b>,
+                                il est normal que la valeur de marché ne vous soit pas encore communiquée :
+                                les vins poursuivent leur élevage en barriques au sein des propriétés,
+                                il n'y a donc pas de vins en circulation.
+                            </p>
+                            <p>L'intégralité des données présentées sont brutes. Les gains perçus sont nets de commissions.</p>
+                            <p>
+                                A titre informatif, les valorisations B2B<sup>*</sup> correspondent à une valeur de revente
+                                « liquide » sur les grandes places de marché des professionnels.
+                                <br/>
+                                <b>Il est donc normal que les performances des « jeunes » portefeuilles puissent être négatives au démarrage.</b>
+                            </p>
+                            <p>
+                                <br/>
+                                <b>Exemple sur un vin vendu 100 en Primeur à un négociant </b>
+                            </p>
+
+                            <table class="pres">
+                                <tr>
+                                    <td>A l'achat</td>
+                                    <td>
+                                        Prix de professionnel : <b>120</b> / Prix de particulier : 140
+                                        <br/>
+                                        Prix d'achat Client U'Wine<sup>**</sup> : 140 x (1 – 5%) =
+                                        <b>133</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2 ans après, lors des premières cotations</td>
+                                    <td>
+                                        Première valorisation B2B<sup>*</sup> : 120 x (1 – 8%) = <b>110</b>
+                                        <br/>
+                                        Première valorisation B2B (%) : (110 – 133) / 133 = <b>-17%</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <b>Analyse du marché professionnel :</b>
+                                        <br/>
+                                        Les vins ne sont pour autant pas disponibles au prix de 110, nous décotons volontairement le Prix Place de Bordeaux<sup>*</sup> pour assurer une liquidité optimale. Les négociants ayant porté leurs stocks n'ont aucun intérêt à brader leurs vins au prix de 110 alors qu'ils les ont vendus au prix de 120, deux ans plus tôt. Les premières cotations ne sont donc pas représentatives d'un marché tant que le marché ne se met pas à échanger les vins.
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <b>Votre lecture :</b>
+                                        <br/>
+                                        Pour un client ayant des conditions d’achat (Prix particulier - 5%), une performance B2B<sup>*</sup> supérieure à -17% est donc une évolution positive de son portefeuille. Ce constat est tout à fait normal et caractéristique des investissements d’actifs (courbe en J).
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <p>
+                                <sup>*</sup>
+                                La valorisation B2B est issue du Liv-Ex, de Wine Decider Pro ou du Prix de Place à Bordeaux (estimé par plusieurs courtiers assermentés et décoté de 8%).
+                                <br/>
+                                <sup>**</sup>
+                                Conditions d'achat de la catégorie 1 : Prix Particulier remisé de 5%. Les autres catégories bénéficient de meilleures conditions d’achat.
+                            </p>
+                        </t>
+                        <t t-else="">
+                            <br/><br/>
+                            <h2>
+                                Reading instructions
+                            </h2>
+
+                            <p>The Management report below includes all of your U'WINE MANDATE portfolios.</p>
+                            <p>
+                                Regarding less than <b>two years old en-primeur vintages</b>, the market value is not
+                                yet displayed: the wines continue to grow in barrels at the estate,
+                                and no wines are on the market yet.
+                            </p>
+                            <p>All the figures below are raw data. Received sums are net of any commission.
+                            </p>
+                            <p>
+                                B2B valuations<sup>*</sup> correspond to a "liquid" resale value on the major professional markets.<br/>
+                                <b>It is therefore normal for the performance of "young" portfolios to be negative.</b>
+                            </p>
+                            <br/>
+                            <p>
+                                <b>Example of an En-Primeur wine sold €100 to a professional wine merchant</b>
+                            </p>
+
+                            <table class="pres">
+                                <tr>
+                                    <td>Upon purchase</td>
+                                    <td>
+                                        Professional price: <b>€120</b> / Consumer resale price: €140<br/>
+                                        U'Wine customer purchase price: €140 x (1 - 5%) = <b>€133</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2 years later, first valuations</td>
+                                    <td>
+                                        First B2B valuation: €120 x (1 - 8%) = <b>€110</b> <br/>
+                                        First B2B valuation (%) : (€110 - €133) / €133 = <b>-17%</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <b>Professional market analysis:</b>
+                                        <br/>
+                                        It does not mean that the wines are actually available at the price of €110; we purposefully discount the Bordeaux Market Price<sup>*</sup> by 8% to guarantee an optimal liquidity. The
+                                        merchants who carried stocks will not sell their wines at €110 while they used to sell them at €120 two years earlier.
+                                        The first quotations are therefore not representative of the market as long as no exchanges happen on the market.
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <b>For investors:</b>
+                                        <br/>
+                                        For an investor with "Category 1" purchasing conditions (Consumer resale price - 5%),
+                                        a B2B performance greater than -17% is a positive evolution of their portfolio.
+                                        This is completely normal and typical of assets investments ("J curve").
+                                    </td>
+                                </tr>
+                        </table>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <p>
+                                <sup>*</sup>
+                                The B2B valuation comes from the Liv-Ex / Wine Decider Pro / Market Price in Bordeaux (estimated by several sworn brokers, and
+                                discounted by 8%).
+                                <br/>
+                                <sup>**</sup> "Category 1" purchasing conditions: Consumer resale price discounted by 5%. Other categories benefit from better purchasing conditions.
+                            </p>
+                        </t>
+                    </div>
+
+                    <div class="pagebreak"/>
+
+                    <h2>
+                        Your U'Wine portfolios
+                    </h2>
+
+                    <table class="striped rowed all_portfolios">
+                        <thead>
+                            <tr class="fake_header_row">
+                                <th style="width: 200px;"></th>
+                                <th class="smaller_header qty"></th>
+                                <th class="smaller_header money"></th>
+                                <th class="smaller_header money"></th>
+                                <th class="smaller_header money"></th>
+                                <th class="smaller_header qty"></th>
+                                <th class="smaller_header money"></th>
+                                <th class="smaller_header perf"></th>
+                                <th class="smaller_header money"></th>
+                                <th class="smaller_header perf"></th>
+                                <th class="smaller_header qty"></th>
+                                <th class="smaller_header money"></th>
+                                <th class="smaller_header perf"></th>
+                                <th class="smaller_header money"></th>
+                                <th class="smaller_header qty"></th>
+                                <th class="smaller_header money"></th>
+                            </tr>
+                            <tr class="all-borders">
+                                <th class="label" rowspan="3" style="width: 200px;">Portfolio</th>
+                                <th class="smaller_header" colspan="4">Wines bought</th>
+                                <th class="smaller_header" colspan="5">Wines in stock</th>
+                                <th class="smaller_header" colspan="4">Sold wines</th>
+                                <th class="smaller_header" colspan="2">Delivered wines</th>
+                            </tr>
+                            <tr class="all-borders">
+                                <th class="smaller_header qty" rowspan="2" style="width: 40px;">Qty<br/>(bt)</th>
+                                <th class="smaller_header money" rowspan="2" style="width: 40px;">Entry value</th>
+                                <th class="smaller_header money" rowspan="2" style="width: 40px;">Fees (provision)</th>
+                                <th class="smaller_header money" rowspan="2" style="width: 40px;">Fees (real)</th>
+                                <th class="smaller_header qty" rowspan="2" style="width: 40px;">Qty<br/>(bt)</th>
+                                <th class="smaller_header money" colspan="2" style="width: 40px;">B2B Valuation</th>
+                                <th class="smaller_header money" colspan="2" style="width: 40px;">B2C Valuation<br/>(U'Wine model)</th>
+                                <th class="smaller_header qty" rowspan="2" style="width: 40px;">Qty<br/>(bt)</th>
+                                <th class="smaller_header money" rowspan="2" style="width: 40px;">Valuation</th>
+                                <th class="smaller_header qty" rowspan="2" style="width: 40px;">Perf.</th>
+                                <th class="smaller_header money" rowspan="2" style="width: 40px;">Cash Received</th>
+                                <th class="smaller_header qty" rowspan="2" style="width: 40px;">Qty<br/>(bt)</th>
+                                <th class="smaller_header money" rowspan="2" style="width: 40px;">Valuation</th>
+                            </tr>
+
+                            <tr class="all-borders">
+                                <th class="smaller_header money">Valuation</th>
+                                <th class="smaller_header perf">Perf.</th>
+                                <th class="smaller_header money">Valuation</th>
+                                <th class="smaller_header perf">Perf.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <t t-foreach="docs" t-as="doc">
+                                <t t-set="doc" t-value="doc.with_context(lang=lang)" />
+                                <t t-set="lines" t-value="doc.env['portfolio_extras.portfolio_report_line'].search([('portfolio', '=', doc.id)])" />
+
+                                <t t-if="lines">
+
+                                    <t t-set="total_entry_sold" t-value="sum([line.price * line.divested_qty for line in lines])" />
+                                    <t t-set="total_entry_stock" t-value="sum([line.price * (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty)  for line in lines])" />
+                                    <t t-set="total_entry_val" t-value="sum([line.price * line.bottling_qty for line in lines])" />
+                                    <t t-set="total_stock_val" t-value="sum([line.valuation_l * (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty) for line in lines])" />
+                                    <t t-set="total_stock_val_b2c" t-value="sum([line.valuation_h * (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty) for line in lines])" />
+                                    <t t-set="total_sold_val" t-value="sum([line.divested_valuation * line.divested_qty for line in lines])" />
+                                    <t t-set="total_delivered_val" t-value="sum([line.consumed_valuation * line.consumed_qty for line in lines])" />
+
+                                    <t t-set="total_paid" t-value="sum([af.price_subtotal for af in doc.x_studio_tw_portefeuille_autofacturation])" />
+                                    <t t-set="total_fee_prev" t-value="sum([f.x_studio_tw_portefeuille_provision_annee_total if f.x_studio_tw_portefeuille_provision_annee_type == 'previsionnel' else 0 for f in doc.x_studio_tw_portefeuille_provision])" />
+                                    <t t-set="total_fee_real" t-value="sum([f.x_studio_tw_portefeuille_provision_annee_total if f.x_studio_tw_portefeuille_provision_annee_type == 'reel' else 0 for f in doc.x_studio_tw_portefeuille_provision])" />
+
+                                    <t t-set="total_entry_qty" t-value="sum([line.bottling_qty for line in lines])" />
+                                    <t t-set="total_stock_qty" t-value="sum([line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty for line in lines])" />
+                                    <t t-set="total_sold_qty" t-value="sum([line.divested_qty for line in lines])" />
+                                    <t t-set="total_delivered_qty" t-value="sum([line.consumed_qty for line in lines])" />
+
+                                    <tr>
+                                        <td class="label">
+                                            <span t-esc="doc.x_studio_tw_portefeuille_client_investisseur.x_studio_tw_contact_prenom" />
+                                            <span t-esc="doc.x_studio_tw_portefeuille_client_investisseur.name" />
+                                            <span t-translation="off">-</span>
+                                            Portfolio
+                                            <span t-if="doc.x_studio_tw_portefeuille_type == 'primeur'">En-Primeur</span>
+                                            <span t-elif="doc.x_studio_tw_portefeuille_type == 'opportunity'">Opportunities</span>
+                                            <span t-elif="doc.x_studio_tw_portefeuille_type == 'allocation'">Allocations</span>
+                                            <span t-elif="doc.x_studio_tw_portefeuille_type == 'cellar_management'">Cellar Management</span>
+                                            <span t-else="" t-esc="doc.x_studio_tw_portefeuille_type" />
+
+                                            <span t-if="doc.x_studio_tw_portefeuille_annee != 0" t-esc="doc.x_studio_tw_portefeuille_annee" />
+                                        </td>
+                                        <td>
+                                            <span t-esc="total_entry_qty" />
+                                        </td>
+                                        <td>
+                                            <span t-esc="total_entry_val" t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                        </td>
+                                        <td>
+                                            <span t-esc="total_fee_prev" t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                        </td>
+                                        <td>
+                                            <span t-esc="total_fee_real" t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                        </td>
+                                        <t t-if="total_entry_qty != (total_stock_qty + total_sold_qty + total_delivered_qty)">
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </t>
+                                        <t t-else="">
+
+                                            <t t-if="total_entry_stock > 0 and (doc.x_studio_tw_portefeuille_type != 'primeur' or doc.x_studio_tw_portefeuille_annee &lt;= max_primeur_year)">
+                                                <td>
+                                                    <span t-esc="total_stock_qty" />
+                                                </td>
+                                                <td>
+                                                    <span t-esc="total_stock_val"
+                                                          t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                                </td>
+
+                                                <td>
+                                                    <span t-att-class="'green' if total_stock_val >= total_entry_stock else 'red'">
+                                                        <span t-esc="100 * (total_stock_val - total_entry_stock) / total_entry_stock"
+                                                              t-options='{"widget": "float", "precision": 1}' />%
+                                                    </span>
+                                                </td>
+
+                                                <td>
+                                                    <span t-esc="total_stock_val_b2c"
+                                                          t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                                </td>
+
+                                                <td>
+                                                    <span t-att-class="'green' if total_stock_val_b2c >= total_entry_stock else 'red'">
+                                                        <span t-esc="100 * (total_stock_val_b2c - total_entry_stock) / total_entry_stock"
+                                                              t-options='{"widget": "float", "precision": 1}' />%
+                                                    </span>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                            </t>
+
+                                            <t t-if="total_sold_qty > 0">
+                                                <td>
+                                                    <span t-esc="total_sold_qty" />
+                                                </td>
+                                                <td>
+                                                    <span t-esc="total_sold_val"
+                                                          t-options='{"widget": "monetary", "display_currency": currency_id}' />
+
+                                                </td>
+                                                <td>
+                                                    <span t-att-class="'green' if total_sold_val >= total_entry_sold else 'red'">
+                                                        <span t-esc="100 * (total_sold_val - total_entry_sold) / total_entry_sold"
+                                                              t-options='{"widget": "float", "precision": 1}' />%
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <t t-if="total_paid > 0">
+                                                        <span t-esc="total_paid"
+                                                              t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                                    </t>
+                                                    <t t-else="">-</t>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                            </t>
+                                            <t t-if="total_delivered_qty">
+                                                <td>
+                                                    <span t-esc="total_delivered_qty" />
+                                                </td>
+                                                <td>
+                                                    <span t-esc="total_delivered_val"
+                                                          t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td>-</td>
+                                                <td>-</td>
+                                            </t>
+
+                                        </t>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr class="total">
+                                <t t-set="all_lines" t-value="docs.env['portfolio_extras.portfolio_report_line'].search([('portfolio', 'in', docs.ids)])" />
+
+                                <t t-set="total_entry_sold" t-value="sum([line.price * line.divested_qty  for line in all_lines])" />
+                                <t t-set="total_entry_stock" t-value="sum([line.price * (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty)   for line in all_lines])" />
+                                <t t-set="total_entry_val" t-value="sum([line.price * line.bottling_qty  for line in all_lines])" />
+                                <t t-set="total_stock_val" t-value="sum([line.valuation_l * (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty)  for line in all_lines])" />
+                                <t t-set="total_stock_val_b2c" t-value="sum([line.valuation_h * (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty)  for line in all_lines])" />
+                                <t t-set="total_sold_val" t-value="sum([line.divested_valuation * line.divested_qty  for line in all_lines])" />
+                                <t t-set="total_delivered_val" t-value="sum([line.consumed_valuation * line.consumed_qty  for line in all_lines])" />
+
+                                <t t-set="total_paid" t-value="sum([af.price_subtotal for doc in docs for af in doc.x_studio_tw_portefeuille_autofacturation])" />
+                                <t t-set="total_fee_prev" t-value="sum([f.x_studio_tw_portefeuille_provision_annee_total if f.x_studio_tw_portefeuille_provision_annee_type == 'previsionnel' else 0 for doc in docs for f in doc.x_studio_tw_portefeuille_provision])" />
+                                <t t-set="total_fee_real" t-value="sum([f.x_studio_tw_portefeuille_provision_annee_total if f.x_studio_tw_portefeuille_provision_annee_type == 'reel' else 0 for doc in docs for f in doc.x_studio_tw_portefeuille_provision])" />
+
+                                <t t-set="total_entry_qty" t-value="sum([line.bottling_qty  for line in all_lines])" />
+                                <t t-set="total_stock_qty" t-value="sum([line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty for line in all_lines])" />
+                                <t t-set="total_sold_qty" t-value="sum([line.divested_qty  for line in all_lines])" />
+                                <t t-set="total_delivered_qty" t-value="sum([line.consumed_qty  for line in all_lines])" />
+
+                                <t t-set="total_entry_sold"
+                                   t-value="sum([line.price * line.divested_qty  for line in all_lines])"/>
+                                <t t-set="total_entry_stock"
+                                   t-value="sum([line.price * (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty)   for line in all_lines])"/>
+                                <t t-set="total_entry_val"
+                                   t-value="sum([line.price * line.bottling_qty  for line in all_lines])"/>
+                                <t t-set="total_stock_val"
+                                   t-value="sum([line.valuation_l * (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty)  for line in all_lines])"/>
+                                <t t-set="total_sold_val"
+                                   t-value="sum([line.divested_valuation * line.divested_qty  for line in all_lines])"/>
+
+                                
+                                <td class="label">Total</td>
+                                <td>
+                                    <span t-esc="total_entry_qty" />
+                                </td>
+                                <td>
+                                    <span t-esc="total_entry_val" t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                </td>
+                                <td>
+                                    <span t-esc="total_fee_prev" t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                </td>
+                                <td>
+                                    <span t-esc="total_fee_real" t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                </td>
+                                <t t-if="total_entry_qty != (total_stock_qty + total_sold_qty + total_delivered_qty)">
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </t>
+                                <t t-else="">
+                                    <t t-if="total_entry_stock > 0 and all([doc.x_studio_tw_portefeuille_type != 'primeur' or doc.x_studio_tw_portefeuille_annee &lt;= max_primeur_year for doc in docs])">
+                                        <td>
+                                            <span t-esc="total_stock_qty" />
+                                        </td>
+                                        <td>
+                                            <span t-esc="total_stock_val"
+                                                  t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                        </td>
+
+                                        <td>
+                                            <span t-att-class="'green' if total_stock_val >= total_entry_stock else 'red'">
+                                                <span t-esc="100 * (total_stock_val - total_entry_stock) / total_entry_stock"
+                                                      t-options='{"widget": "float", "precision": 1}' />%
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <span t-esc="total_stock_val_b2c"
+                                                  t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                        </td>
+
+                                        <td>
+                                            <span t-att-class="'green' if total_stock_val_b2c >= total_entry_stock else 'red'">
+                                                <span t-esc="100 * (total_stock_val_b2c - total_entry_stock) / total_entry_stock"
+                                                      t-options='{"widget": "float", "precision": 1}' />%
+                                            </span>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </t>
+
+                                    <t t-if="total_sold_qty > 0">
+                                        <td>
+                                            <span t-esc="total_sold_qty" />
+                                        </td>
+                                        <td>
+                                            <span t-esc="total_sold_val"
+                                                  t-options='{"widget": "monetary", "display_currency": currency_id}' />
+
+                                        </td>
+                                        <td>
+                                            <span t-att-class="'green' if total_sold_val >= total_entry_sold else 'red'">
+                                                <span t-esc="100 * (total_sold_val - total_entry_sold) / total_entry_sold"
+                                                      t-options='{"widget": "float", "precision": 1}' />%
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <t t-if="total_paid > 0">
+                                                <span t-esc="total_paid"
+                                                      t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                            </t>
+                                            <t t-else="">-</t>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </t>
+                                    <t t-if="total_delivered_qty">
+                                        <td>
+                                            <span t-esc="total_delivered_qty" />
+                                        </td>
+                                        <td>
+                                            <span t-esc="total_delivered_val"
+                                                  t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </t>
+
+                                </t>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <t t-foreach="docs" t-as="doc">
+                        <t t-set="doc" t-value="doc.with_context(lang=lang)" />
+                        <t t-set="lines" t-value="doc.env['portfolio_extras.portfolio_report_line'].search([('portfolio', '=', doc.id)])" />
+
+                        <t t-if="lines">
+
+                            <div class="pagebreak"/>
+                            <h2>
+                                <span t-esc="doc.x_studio_tw_portefeuille_client_investisseur.x_studio_tw_contact_prenom" />
+                                <span t-esc="doc.x_studio_tw_portefeuille_client_investisseur.name" />
+                                <span t-translation="off">-</span>
+                                Portfolio
+                                <span t-if="doc.x_studio_tw_portefeuille_type == 'primeur'">En-Primeur</span>
+                                <span t-elif="doc.x_studio_tw_portefeuille_type == 'opportunity'">Opportunities</span>
+                                <span t-elif="doc.x_studio_tw_portefeuille_type == 'allocation'">Allocations</span>
+                                <span t-elif="doc.x_studio_tw_portefeuille_type == 'cellar_management'">Cellar Management</span>
+                                <span t-else="" t-esc="doc.x_studio_tw_portefeuille_type" />
+
+                                <span t-if="doc.x_studio_tw_portefeuille_annee != 0" t-esc="doc.x_studio_tw_portefeuille_annee" />
+
+                            </h2>
+                            <div>
+                                <t t-set="has_receptions" t-value="any([line.to_receive_qty > 0 for line in lines])" />
+                                <t t-set="has_stock" t-value="any([line.in_stock_qty + line.to_divest_qty + line.to_consume_qty > 0 for line in lines])" />
+                                <t t-set="has_sold" t-value="any([line.divested_qty > 0 for line in lines])" />
+                                <t t-set="has_consumed" t-value="any([line.consumed_qty > 0 for line in lines])" />
+                                <t t-set="show_stock_val" t-value="has_stock and (doc.x_studio_tw_portefeuille_type != 'primeur' or doc.x_studio_tw_portefeuille_annee &lt;= max_primeur_year)" />
+
+                                <table class="striped rowed">
+                                    <thead>
+                                        <tr class="all-borders">
+                                            <th class="label">Wine</th>
+                                            <th class="label" style="width: 120px;">Bottling</th>
+                                            <th class="smaller_header qty">Bought<br/>(bt)</th>
+                                            <th class="smaller_header money">Buying price<br/>(unit/total)</th>
+                                            <th t-if="has_receptions" class="smaller_header qty">To be received<br/>(bt)</th>
+                                            <th t-if="has_stock" class="smaller_header qty">In stock<br/>(bt)</th>
+                                            <th t-if="has_sold" class="smaller_header qty">Sold<br/>(bt)</th>
+                                            <th t-if="has_consumed" class="smaller_header qty">Delivered<br/>(bt)</th>
+                                            <th t-if="has_stock and show_stock_val" class="smaller_header money">Stock valuation B2B<br/>(unit/total)</th>
+                                            <th t-if="has_stock and show_stock_val" class="smaller_header money">Stock valuation B2C<br/>(unit/total)</th>
+                                            <th t-if="has_sold" class="smaller_header money">Sold price<br/>(unit/total)</th>
+                                            <th t-if="has_stock and show_stock_val" class="smaller_header money">Latent Performance<br/>(B2B)</th>
+                                            <th t-if="has_stock and show_stock_val" class="smaller_header money">Latent Performance<br/>(B2C)</th>
+                                            <th t-if="has_sold" class="smaller_header money">Performance achieved</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="lines" t-as="line">
+                                            <t t-set="total_entry" t-value="line.price * line.bottling_qty" />
+                                            <tr>
+                                                <td class="label"> <span t-field="line.product.name" /></td>
+                                                <td class="label"> <span t-field="line.bottling.name" /></td>
+                                                <td class="qty"> <span t-field="line.bottling_qty" /></td>
+
+                                                <td class="money">
+                                                    <span class="i" t-field="line.price" t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                                    <br/>
+                                                    <span t-esc="total_entry" t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                                </td>
+
+                                                <td t-if="has_receptions" class="qty"> <span t-if="line.to_receive_qty > 0" t-field="line.to_receive_qty" /></td>
+                                                <td t-if="has_stock" class="qty"> <span t-if="line.in_stock_qty + line.to_divest_qty + line.to_consume_qty > 0" t-esc="line.in_stock_qty + line.to_divest_qty + line.to_consume_qty" /></td>
+                                                <td t-if="has_sold" class="qty"> <span t-if="line.divested_qty > 0" t-field="line.divested_qty" /></td>
+                                                <td t-if="has_consumed" class="qty"> <span t-if="line.consumed_qty > 0" t-field="line.consumed_qty" /></td>
+
+                                                <td t-if="has_stock and show_stock_val" class="money">
+                                                    <t t-if="line.valuation_l > 0 and (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty) > 0">
+                                                        <span class="i" t-esc="line.valuation_l" t-options='{"widget": "monetary", "display_currency": currency_id}' /><br/>
+                                                        <span t-esc="line.valuation_l * (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty)" t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                                    </t>
+                                                </td>
+
+                                                <td t-if="has_stock and show_stock_val" class="money">
+                                                    <t t-if="line.valuation_h > 0 and (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty) > 0">
+                                                        <span class="i" t-esc="line.valuation_h" t-options='{"widget": "monetary", "display_currency": currency_id}' /><br/>
+                                                        <span t-esc="line.valuation_h * (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty)" t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                                    </t>
+                                                </td>
+                                                <td t-if="has_sold" class="money">
+                                                    <t t-if="line.divested_valuation > 0">
+                                                        <span class="i" t-esc="line.divested_valuation" t-options='{"widget": "monetary", "display_currency": currency_id}' /><br/>
+                                                        <span t-esc="line.divested_valuation * line.divested_qty" t-options='{"widget": "monetary", "display_currency": currency_id}' />
+                                                    </t>
+                                                </td>
+                                                <td t-if="has_stock and show_stock_val" class="money">
+                                                    <t t-if="line.valuation_l > 0 and (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty) > 0">
+                                                        <span t-att-class="'green' if line.valuation_l >= line.price else 'red'">
+                                                            <span t-esc="100 * (line.valuation_l - line.price) / line.price"
+                                                                  t-options='{"widget": "float", "precision": 1}' />%
+                                                        </span>
+                                                    </t>
+                                                </td>
+                                                <td t-if="has_stock and show_stock_val" class="money">
+                                                    <t t-if="line.valuation_h > 0 and (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty) > 0">
+                                                        <span t-att-class="'green' if line.valuation_h >= line.price else 'red'">
+                                                            <span t-esc="100 * (line.valuation_h - line.price) / line.price"
+                                                                  t-options='{"widget": "float", "precision": 1}' />%
+                                                        </span>
+                                                    </t>
+                                                </td>
+                                                <td t-if="has_sold" class="money">
+                                                    <t t-if="line.divested_valuation > 0">
+                                                        <span t-att-class="'green' if line.divested_valuation >= line.price else 'red'">
+                                                            <span t-esc="100 * (line.divested_valuation - line.price) / line.price"
+                                                                  t-options='{"widget": "float", "precision": 1}' />%
+                                                        </span>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </t>
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="total">
+                                            <t t-set="total_entry_sold"
+                                               t-value="sum([line.price * line.divested_qty for line in lines])"/>
+                                            <t t-set="total_entry_stock"
+                                               t-value="sum([line.price * (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty)  for line in lines])"/>
+                                            <t t-set="total_entry_val"
+                                               t-value="sum([line.price * line.bottling_qty for line in lines])"/>
+                                            <t t-set="total_stock_val"
+                                               t-value="sum([line.valuation_l * (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty) for line in lines])"/>
+                                            <t t-set="total_stock_val_b2c"
+                                               t-value="sum([line.valuation_h * (line.to_receive_qty + line.in_stock_qty + line.to_divest_qty + line.to_consume_qty) for line in lines])"/>
+                                            <t t-set="total_sold_val"
+                                               t-value="sum([line.divested_valuation * line.divested_qty for line in lines])"/>
+
+                                            <td class="label" rowspan="2" colspan="2">Total</td>
+                                            <td class="qty" rowspan="2">
+                                                <span t-esc="sum([line.bottling_qty for line in lines])"/>
+                                            </td>
+                                            <td class="money" rowspan="2">
+                                                <span t-esc="total_entry_val"
+                                                      t-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                                            </td>
+
+                                            <td t-if="has_receptions" class="qty" rowspan="2">
+                                                <span t-esc="sum([line.to_receive_qty for line in lines])"/>
+                                            </td>
+                                            <td t-if="has_stock" class="qty" rowspan="2">
+                                                <span t-esc="sum([line.in_stock_qty + line.to_divest_qty + line.to_consume_qty for line in lines])"/>
+                                            </td>
+                                            <td t-if="has_sold" class="qty" rowspan="2">
+                                                <span t-esc="sum([line.divested_qty for line in lines])"/>
+                                            </td>
+                                            <td t-if="has_consumed" class="qty" rowspan="2">
+                                                <span t-esc="sum([line.consumed_qty for line in lines])"/>
+                                            </td>
+
+                                            <td t-if="has_stock and show_stock_val" class="money bleft">
+                                                <span t-esc="total_stock_val"
+                                                      t-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                                            </td>
+
+                                            <td t-if="has_stock and show_stock_val" class="money bleft">
+                                                <span t-esc="total_stock_val_b2c"
+                                                      t-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                                            </td>
+                                            <td t-if="has_sold" class="money bleft">
+                                                <t>
+                                                    <span t-esc="total_sold_val"
+                                                          t-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                                                </t>
+                                            </td>
+                                            <td t-if="has_stock and show_stock_val" class="bleft">
+                                                <span t-att-class="'green' if total_stock_val >= total_entry_stock else 'red'">
+                                                    <span t-esc="100 * (total_stock_val - total_entry_stock) / total_entry_stock"
+                                                          t-options='{"widget": "float", "precision": 1}'/>%
+                                                </span>
+                                            </td>
+
+                                            <td t-if="has_stock and show_stock_val" class="bleft">
+                                                <span t-att-class="'green' if total_stock_val_b2c >= total_entry_stock else 'red'">
+                                                    <span t-esc="100 * (total_stock_val_b2c - total_entry_stock) / total_entry_stock"
+                                                          t-options='{"widget": "float", "precision": 1}'/>%
+                                                </span>
+                                            </td>
+                                            <td t-if="has_sold" class="money bleft">
+                                                <span t-att-class="'green' if total_sold_val >= total_entry_sold else 'red'">
+                                                    <span t-esc="100 * (total_sold_val - total_entry_sold) / total_entry_sold"
+                                                          t-options='{"widget": "float", "precision": 1}'/>%
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="has_stock and has_sold" class="total">
+                                            <td colspan="3" class="bleft">
+                                                <span t-esc="total_stock_val + total_sold_val"
+                                                      t-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                                                to
+                                                <span t-esc="total_stock_val_b2c + total_sold_val"
+                                                      t-options='{"widget": "monetary", "display_currency": currency_id}'/>
+                                            </td>
+                                            <td colspan="3" class="bleft">
+                                                <span t-att-class="'green' if total_stock_val + total_sold_val >= total_entry_val else 'red'">
+                                                    <span t-esc="100 * (total_stock_val + total_sold_val - total_entry_val) / total_entry_val"
+                                                          t-options='{"widget": "float", "precision": 1}'/>%
+                                                </span>
+                                                to
+                                                <span t-att-class="'green' if total_stock_val_b2c + total_sold_val >= total_entry_val else 'red'">
+                                                    <span t-esc="100 * (total_stock_val_b2c + total_sold_val - total_entry_val) / total_entry_val"
+                                                          t-options='{"widget": "float", "precision": 1}'/>%
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                        </t>
+
+                    </t>
+                    <div class="pagebreak"/>
+
+                    <div class="annex">
+                        <h2>
+                            Annex: bottling
+                        </h2>
+                        <table class="striped rowed" style="width: auto; text-align: left;">
+                            <thead>
+                                <tr class="all-borders">
+                                    <th style="width: 120px;">Bottling</th>
+                                    <th style="width: 100px;">Bottles per case</th>
+                                    <th style="width: 100px;">Bottle size</th>
+                                    <th style="width: 400px;">Case</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td t-translation="off">CBO1-75</td><td t-translation="off">1</td><td t-translation="off">75cl</td><td>Original Wooden Case</td></tr>
+                                <tr><td t-translation="off">CBO2-75</td><td t-translation="off">2</td><td t-translation="off">75cl</td><td>Original Wooden Case</td></tr>
+                                <tr><td t-translation="off">CBO3-75</td><td t-translation="off">3</td><td t-translation="off">75cl</td><td>Original Wooden Case</td></tr>
+                                <tr><td t-translation="off">CBO6-75</td><td t-translation="off">6</td><td t-translation="off">75cl</td><td>Original Wooden Case</td></tr>
+                                <tr><td t-translation="off">CBO12-75</td><td t-translation="off">12</td><td t-translation="off">75cl</td><td>Original Wooden Case</td></tr>
+                                <tr><td t-translation="off">CBO1-150</td><td t-translation="off">1</td><td t-translation="off">150cl</td><td>Original Wooden Case</td></tr>
+                                <tr><td t-translation="off">CBO3-150</td><td t-translation="off">3</td><td t-translation="off">150cl</td><td>Original Wooden Case</td></tr>
+                                <tr><td t-translation="off">CBO6-150</td><td t-translation="off">3</td><td t-translation="off">150cl</td><td>Original Wooden Case</td></tr>
+                                <tr><td t-translation="off">CBO1-300</td><td t-translation="off">1</td><td t-translation="off">300cl</td><td>Original Wooden Case</td></tr>
+                                <tr><td t-translation="off">CBO1-500</td><td t-translation="off">1</td><td t-translation="off">500cl</td><td>Original Wooden Case</td></tr>
+                                <tr><td t-translation="off">CBO1-600</td><td t-translation="off">1</td><td t-translation="off">600cl</td><td>Original Wooden Case</td></tr>
+                                <tr><td t-translation="off">CARTON1-75</td><td t-translation="off">1</td><td t-translation="off">75cl</td><td>Original cardboard box</td></tr>
+                                <tr><td t-translation="off">CARTON3-75</td><td t-translation="off">3</td><td t-translation="off">75cl</td><td>Original cardboard box</td></tr>
+                                <tr><td t-translation="off">CARTON6-75</td><td t-translation="off">6</td><td t-translation="off">75cl</td><td>Original cardboard box</td></tr>
+                                <tr><td t-translation="off">CARTON12-75</td><td t-translation="off">12</td><td t-translation="off">75cl</td><td>Original cardboard box</td></tr>
+                                <tr><td t-translation="off">CARTON1-150</td><td t-translation="off">1</td><td t-translation="off">150cl</td><td>Original cardboard box</td></tr>
+                                <tr><td t-translation="off">CARTON3-150</td><td t-translation="off">3 </td><td t-translation="off">150cl</td><td>Original cardboard box</td></tr>
+                                <tr><td t-translation="off">CARTON1-300</td><td t-translation="off">1</td><td t-translation="off">300cl</td><td>Original cardboard box</td></tr>
+                                <tr><td t-translation="off">CARTON1-500</td><td t-translation="off">1</td><td t-translation="off">500cl</td><td>Original cardboard box</td></tr>
+                                <tr><td t-translation="off">CARTON1-600</td><td t-translation="off">1</td><td t-translation="off">600cl</td><td>Original cardboard box</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </t>
+        </template>
+
+        <template id="report_pf_stock_base">
+            <t t-call="web.html_container">
+                <t t-set="docs" t-value="docs.sorted(key=lambda d: (d.x_studio_tw_portefeuille_client_investisseur, d.x_studio_tw_portefeuille_annee, d.x_studio_tw_portefeuille_type))" />
+                <t t-set="lang" t-value="docs[0].x_studio_tw_portefeuille_client_investisseur.lang"/>
+                <t t-call="portfolio_extras.report_pf_stock_document" t-lang="lang"/>
+            </t>
+        </template>
+
+        <report id="report_pf_stock_report"
+                model="x_tw_portefeuille"
+                name="portfolio_extras.report_pf_stock_base"
+                file="portfolio_extras.report_pf_stock_base"
+                string="Management report"
+                paperformat="portfolio_extras.paperformat_pf_report"
+                report_type="qweb-pdf" />
+                <!-- print_report_name for a dynamic name -->
+
+    </data>
+</odoo>
