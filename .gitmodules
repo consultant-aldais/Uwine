@@ -31,3 +31,8 @@
 [submodule "shop_manager"]
 	path = shop_manager
 	url = git@github.com:uwine-fr/shop_manager.git
+
+[submodule "uwine-fr/reporting-engine"]
+	path = uwine-fr/reporting-engine
+	url = git@github.com:uwine-fr/reporting-engine.git
+	branch = 12.0
